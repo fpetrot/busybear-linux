@@ -5,7 +5,7 @@ EXECS   :=$(patsubst %.o,%,$(OBJECTS))
 # Use the smallest dataset for the same reason, and also because gem5
 # is supposed to simulate that stuff
 CFLAGS=-O3 -I./utilities -DPOLYBENCH_DUMP_ARRAYS -DMINI_DATASET
-CC=riscv64-linux-gnu-gcc
+CC=riscv64-unknown-linux-gnu-gcc
 
 # Special handling of ./utilities/polybench.o in the rules
 
