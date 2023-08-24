@@ -6,9 +6,34 @@
 /bin/busybox --install -s
 mkdir -p /dev/pts
 mount -t devpts devpts /dev/pts
-ifup -a
-
-for i in /etc/init.d/S??*
-do
-	$i start
-done
+heat-3d
+fdtd-2d
+seidel-2d
+adi
+jacobi-1d
+jacobi-2d
+correlation
+covariance
+trmm
+gesummv
+syrk
+symm
+gemm
+syr2k
+gemver
+atax
+3mm
+doitgen
+mvt
+bicg
+2mm
+trisolv
+cholesky
+gramschmidt
+durbin
+ludcmp
+lu
+deriche
+floyd-warshall
+nussinov
+halt
