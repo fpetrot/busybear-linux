@@ -4,5 +4,7 @@
 ttyS0::respawn:/sbin/getty 115200 ttyS0
 ::respawn:/sbin/klogd -n
 ::respawn:/sbin/syslogd -n
-::respawn:/usr/sbin/ntpd -n
 ::respawn:/sbin/dropbear -R -F
+#::once:-/bin/ash -c "cd /root && ./parsec_exec_for_trace small 4 test
+#::once:-/bin/ash -c "halt"
+
