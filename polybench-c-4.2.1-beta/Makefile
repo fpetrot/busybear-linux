@@ -16,10 +16,10 @@ CC=riscv64-unknown-linux-gnu-gcc
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all : $(EXECS)
-	if [ ! -d "../mnt" ]; then \
-		echo "The ../mnt folder does not exist, please compile busybox"; \
+	if [ ! -d "/tmp/mnt" ]; then \
+		echo "The /tmp/mnt folder does not exist, please compile busybox"; \
 	else \
-		mv $^ ../mnt/bin; \
+		mv $^ /tmp/mnt/usr/bin; \
 	fi
 
 $(EXECS) : ./utilities/polybench.o $(OBJECTS)

@@ -4,36 +4,38 @@
 /bin/busybox mount -o remount,rw /
 /bin/busybox mount -a
 /bin/busybox --install -s
+/sbin/mdev -s
 mkdir -p /dev/pts
 mount -t devpts devpts /dev/pts
-heat-3d
-fdtd-2d
-seidel-2d
-adi
-jacobi-1d
-jacobi-2d
-correlation
-covariance
-trmm
-gesummv
-syrk
-symm
-gemm
-syr2k
-gemver
-atax
-3mm
-doitgen
-mvt
-bicg
-2mm
-trisolv
-cholesky
-gramschmidt
-durbin
-ludcmp
-lu
-deriche
-floyd-warshall
-nussinov
+heat-3d &
+fdtd-2d &
+seidel-2d &
+adi &
+jacobi-1d &
+jacobi-2d &
+correlation &
+covariance &
+trmm &
+gesummv &
+syrk &
+symm &
+gemm &
+syr2k &
+gemver &
+atax &
+3mm &
+doitgen &
+mvt &
+bicg &
+2mm &
+trisolv &
+cholesky &
+gramschmidt &
+durbin &
+ludcmp &
+lu &
+deriche &
+floyd-warshall &
+nussinov &
+wait
 halt

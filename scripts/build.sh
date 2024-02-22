@@ -36,7 +36,6 @@ test -f archives/dropbear-${DROPBEAR_VERSION}.tar.bz2 || \
 test -f archives/linux-${LINUX_KERNEL_VERSION}.tar.xz || \
     curl -L -o archives/linux-${LINUX_KERNEL_VERSION}.tar.xz \
         https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${LINUX_KERNEL_VERSION}.tar.xz
-        #https://git.kernel.org/torvalds/t/linux-${LINUX_KERNEL_VERSION}.tar.gz
 
 #
 # extract busybox, dropbear and linux
