@@ -72,15 +72,15 @@ test -x build/busybox-${BUSYBOX_VERSION}/busybox || (
     cd build/busybox-${BUSYBOX_VERSION}
     make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} oldconfig
     # Install in /tmp to make sure it is a fresh install
-    rm -rf /tmp/mnt
-    make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} CONFIG_PREFIX=/tmp/mnt install
+    rm -rf ${MNT}
+    make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} CONFIG_PREFIX=${MNT} install
     #
-    # Compile the polybenches and put everything in /tmp/mnt
+    # Compile the polybenches and put everything in ${MNT}
     #
     cd -
     test -x polybench-c-4.2.1-beta/utilities/polybench.o || (
-	cd polybench-c-4.2.1-beta
-	make CC=${CROSS_COMPILE}gcc
+        cd polybench-c-4.2.1-beta
+        make CCC=${CROSS_COMPILE}gcc MNT=${MNT}
     )
 )
 test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (

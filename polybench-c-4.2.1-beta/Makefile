@@ -17,10 +17,10 @@ CCC ?= riscv64-unknown-linux-gnu-gcc
 
 # This Makefile is expected to be used only when building a busybox image
 all : $(EXECS)
-	@if [ ! -d "/tmp/mnt" ]; then \
-		echo "The ../mnt folder does not exist, please compile busybox"; \
+	@if [ ! -d "$(MNT)" ]; then \
+		echo "The $(MNT) folder does not exist, please compile busybox"; \
 	else \
-		mv $^ /tmp/mnt/bin; \
+		mv $^ $(MNT)/bin; \
 	fi
 
 $(EXECS) : ./utilities/polybench.o $(OBJECTS)

@@ -49,8 +49,12 @@ copy_libs() {
 (
     set -e
 
-    # now we have installed busybox in /tmp
-    cp -r /tmp/mnt .
+    # now we have installed busybox in temp dir
+    if [ -z "${MNT}" ]; then
+	echo "Error: source mnt directory not found, bailing out"
+	exit 1
+    fi
+    cp -r ${MNT}/* mnt/
 
     # create directories
     for dir in root bin dev etc lib lib/modules proc sbin sys tmp \
