@@ -5,21 +5,22 @@ EXECS   :=$(patsubst %.o,%,$(OBJECTS))
 # Use the smallest dataset for the same reason, and also because gem5
 # is supposed to simulate that stuff
 CFLAGS=-O3 -I./utilities -DPOLYBENCH_DUMP_ARRAYS -DMINI_DATASET
-CC=riscv64-unknown-linux-gnu-gcc
+CCC ?= riscv64-unknown-linux-gnu-gcc
 
 # Special handling of ./utilities/polybench.o in the rules
 
 %: %.o
-	$(CC) -o $@ $< ./utilities/polybench.o -lm
+	$(CCC) -o $@ $< ./utilities/polybench.o -lm
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CCC) $(CFLAGS) -c $< -o $@
 
+# This Makefile is expected to be used only when building a busybox image
 all : $(EXECS)
-	if [ ! -d "/tmp/mnt" ]; then \
-		echo "The /tmp/mnt folder does not exist, please compile busybox"; \
+	@if [ ! -d "/tmp/mnt" ]; then \
+		echo "The ../mnt folder does not exist, please compile busybox"; \
 	else \
-		mv $^ /tmp/mnt/usr/bin; \
+		mv $^ /tmp/mnt/bin; \
 	fi
 
 $(EXECS) : ./utilities/polybench.o $(OBJECTS)

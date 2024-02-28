@@ -74,9 +74,20 @@ test -x build/busybox-${BUSYBOX_VERSION}/busybox || (
     # Install in /tmp to make sure it is a fresh install
     rm -rf /tmp/mnt
     make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} CONFIG_PREFIX=/tmp/mnt install
+    #
+    # Compile the polybenches and put everything in /tmp/mnt
+    #
+    cd -
+    test -x polybench-c-4.2.1-beta/utilities/polybench.o || (
+	cd polybench-c-4.2.1-beta
+	make CC=${CROSS_COMPILE}gcc
+    )
 )
 test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (
     cd build/dropbear-${DROPBEAR_VERSION}
+    # Quick and dirty hack to avoid #error we just don't care about
+    # Pretty gross, I admit
+    sed -e "213s/1/0/" -i default_options.h
     ./configure --host=${CROSS_COMPILE%-} --disable-zlib
     make -j
 )
