@@ -4,8 +4,9 @@ EXECS   :=$(patsubst %.o,%,$(OBJECTS))
 # Dumps the arrays in a first stage to make sure everything goes fine
 # Use the smallest dataset for the same reason, and also because gem5
 # is supposed to simulate that stuff
-CFLAGS=-O3 -I./utilities -DPOLYBENCH_DUMP_ARRAYS -DMINI_DATASET
+CFLAGS=-O3 -I./utilities -DSTANDARD_DATASET #-DPOLYBENCH_DUMP_ARRAYS -DMINI_DATASET
 CCC ?= riscv64-unknown-linux-gnu-gcc
+MNT ?= ../mnt
 
 # Special handling of ./utilities/polybench.o in the rules
 
