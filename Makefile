@@ -1,7 +1,7 @@
 all: busybear.bin
 
 clean:
-	rm -fr build busybear.bin
+	rm -fr build busybear-riscv64.bin busybear-riscv32.bin
 
 distclean: clean
 	rm -fr archives
