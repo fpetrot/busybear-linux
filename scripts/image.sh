@@ -80,8 +80,8 @@ copy_libs() {
                 done
             cd - > /dev/null
         done
-        tar xf ${PARSEC_HOME}/pkgs/apps/blackscholes/inputs/input_native.tar -C mnt/root/pkgs/apps/blackscholes/inputs
-        tar xf ${PARSEC_HOME}/pkgs/apps/bodytrack/inputs/input_native.tar -C mnt/root/pkgs/apps/bodytrack/inputs
+        #tar xf ${PARSEC_HOME}/pkgs/apps/blackscholes/inputs/input_native.tar -C mnt/root/pkgs/apps/blackscholes/inputs
+        #tar xf ${PARSEC_HOME}/pkgs/apps/bodytrack/inputs/input_simsmall.tar -C mnt/root/pkgs/apps/bodytrack/inputs
         cp ${PARSEC_HOME}/parsec_exec mnt/root
         cp ${PARSEC_HOME}/parsec_eval mnt/root
     fi

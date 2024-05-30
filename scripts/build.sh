@@ -78,6 +78,9 @@ test -x build/busybox-${BUSYBOX_VERSION}/busybox || (
 )
 test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (
     cd build/dropbear-${DROPBEAR_VERSION}
+    # Very dirty hack that increases line lenght each time it is called !
+    sed '213i//' default_options.h|sed '213{N;s/\n//;}'>1 && mv 1 default_options.h
+    sed -i '213d' default_options.h
     ./configure --host=${CROSS_COMPILE%-} --disable-zlib
     make -j
 )
