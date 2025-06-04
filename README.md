@@ -15,10 +15,16 @@ to compile for riscv32.
 This allows to check that we do not break too many things when hacking in
 QEMU.
 
-Note that _this is meant to be compiled with a home made cross-dev
+Note that _this was meant to be compiled with a home made cross-dev
 toolchain_, as there are sysroot dependencies that some distros do not
 provide, TTBOMK.
 The symptom is that boot fails while launching `/sbin/init`.
+
+The current HEAD version has been tuned to be compiled on ubuntu using the
+packaged riscv cross-development tools, for which the executable binaries
+and the sysroot directory do not stand under the same path, ...
+Supporting both would be nice, I'll think about it when I have time or
+I would happily merge a PR.
 
 Also, you cannot compile the 32 and 64 bit versions at the same time, however
 the generated files are in different directories or have different names at the
@@ -34,6 +40,7 @@ and
 ../qemu-vp/build-rtan/qemu-system-riscv64 -nographic -kernel build/linux-6.0.9-riscv64/arch/riscv/boot/Image -machine virt -m 4G -append "root=/dev/vda ro console=ttyS0 debug" -drive file=busybear-riscv64.bin,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -accel tcg,thread=multi -smp 32
 ```
 
+*NOTE* I haven't synched the parsec branch with the trunk yet.
 To run the parsec, please clone the `compile` branch of our parsec repo as follows: 
 ```
 git clone -b compile --single-branch https://github.com/fpetrot/parsec.git parsec-3.0
@@ -43,7 +50,7 @@ And follow the steps to build the benchmark.
 Then, set the `$PARSEC_HOME` to the path in which you cloned (that ends with `/parsec-3.0`),
 and build `busybear` as you see fits.
 
-======================= Original Busybear Linux README ====================
+# ======================= Original Busybear Linux README ====================
 # busybear-linux
 
 busybear-linux is a tiny RISC-V Linux root filesystem image that targets

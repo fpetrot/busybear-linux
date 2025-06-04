@@ -88,11 +88,14 @@ copy_libs() {
 
     # check that the cross-dev env contains the sysroot directory
     # probably should do that earlier, ...
-    SYSROOT=$(realpath ${GCC_DIR}/sysroot/)
-    if [ -z "${SYSROOT}" ] ; then
-        echo "You must use a linux capable cross-dev environment"
-        exit
-    fi
+    #SYSROOT=$(realpath ${GCC_DIR}/sysroot/)
+    #if [ -z "${SYSROOT}" ] ; then
+    #    echo "You must use a linux capable cross-dev environment"
+    #    exit
+    #fi
+    
+    # this is what ubuntu does for riscv64
+    SYSROOT=/usr/riscv64-linux-gnu
 
     # copy libraries
     if [ -d ${SYSROOT}/usr/lib${ARCH/riscv/}/${ABI}/ ]; then
@@ -104,7 +107,7 @@ copy_libs() {
     LDSO_TARGET=${SYSROOT}/lib/${LDSO_NAME}
     mkdir -p mnt/${ABI_DIR}/
     copy_libs ${SYSROOT}/lib/ mnt/${ABI_DIR}/
-    copy_libs ${SYSROOT}/usr/${ABI_DIR}/ mnt/${ABI_DIR}/
+    #copy_libs ${SYSROOT}/usr/${ABI_DIR}/ mnt/${ABI_DIR}/
     if [ ! -e mnt/lib/${LDSO_NAME} ]; then
         ln -s /${ABI_DIR}/$(basename ${LDSO_TARGET}) mnt/lib/${LDSO_NAME}
     fi

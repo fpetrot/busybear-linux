@@ -17,7 +17,7 @@ done
 #
 # find executables
 #
-for prog in ${CROSS_COMPILE}gcc sudo nproc curl openssl rsync; do
+for prog in ${CROSS_COMPILE}gcc sudo nproc curl openssl rsync genext2fs; do
     if [ -z $(which ${prog}) ]; then
         echo "error: ${prog} not found in PATH" && exit 1
     fi
@@ -87,10 +87,10 @@ test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (
 test -x build/linux-${LINUX_KERNEL_VERSION}/Image || (
     cd build/linux-${LINUX_KERNEL_VERSION}
     # Quick and dirty hack to avoid known compilation issue
-    sed -e 's/^YYLTYPE yylloc;/extern &/' -i scripts/dtc/dtc-lexer.l
+    # sed -e 's/^YYLTYPE yylloc;/extern &/' -i scripts/dtc/dtc-lexer.l
     # Allow more than 32 CPUs max when configuring the kernel
-    echo "$(awk '/config NR_CPUS/,/^$/{sub(/32/,"1024"); print $0;next}{print $0}' arch/riscv/Kconfig)" > arch/riscv/Kconfig
-    make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} olddefconfig
+    # echo "$(awk '/config NR_CPUS/,/^$/{sub(/32/,"1024"); print $0;next}{print $0}' arch/riscv/Kconfig)" > arch/riscv/Kconfig
+    make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} .config
     make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} Image
 )
 
