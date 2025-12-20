@@ -8,7 +8,7 @@ set -e
 # test environment
 #
 for var in ARCH ABI CROSS_COMPILE BUSYBOX_VERSION \
-    DROPBEAR_VERSION LINUX_KERNEL_VERSION; do
+    DROPBEAR_VERSION LINUX_KERNEL_VERSION MNTTMP; do
     if [ -z "${!var}" ]; then
         echo "${!var} not set" && exit 1
     fi
@@ -68,13 +68,13 @@ cp conf/linux-${ARCH}.config build/linux-${LINUX_KERNEL_VERSION}/.config
 #
 # build busybox, dropbear and linux
 #
-export MAKEFLAGS=-j$(nproc)
+export MAKEFLAGS="-j $((($(nproc)+1)/2))"
 test -x build/busybox-${BUSYBOX_VERSION}/busybox || (
     cd build/busybox-${BUSYBOX_VERSION}
-    make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} oldconfig
+    make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} oldconfig
     # Install in /tmp to make sure it is a fresh install
-    rm -rf /tmp/mnt
-    make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} CONFIG_PREFIX=/tmp/mnt install
+    rm -rf ${MNTTMP}
+    make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} CONFIG_PREFIX=${MNTTMP} install
 )
 test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (
     cd build/dropbear-${DROPBEAR_VERSION}
@@ -82,7 +82,7 @@ test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (
     sed '213i//' default_options.h|sed '213{N;s/\n//;}'>1 && mv 1 default_options.h
     sed -i '213d' default_options.h
     ./configure --host=${CROSS_COMPILE%-} --disable-zlib
-    make -j
+    make
 )
 test -x build/linux-${LINUX_KERNEL_VERSION}/Image || (
     cd build/linux-${LINUX_KERNEL_VERSION}

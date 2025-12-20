@@ -22,7 +22,6 @@ fi
 #
 rm -f ${IMAGE_FILE}
 rm -rf mnt
-mkdir mnt
 
 set +e
 
@@ -49,8 +48,9 @@ copy_libs() {
 (
     set -e
 
-    # now we have installed busybox in /tmp
-    cp -r /tmp/mnt .
+    # now we have installed in busybox /tmp
+    rm -rf mnt
+    cp -r ${MNTTMP} ./mnt
 
     # create directories
     for dir in root bin dev etc lib lib/modules proc sbin sys tmp \
