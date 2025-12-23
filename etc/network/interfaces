@@ -1,9 +1,7 @@
-auto lo
-iface lo inet loopback
-
 auto eth0
 iface eth0 inet static
-	address 192.168.122.2
-	netmask 255.255.255.0
-	broadcast 192.168.122.255
-	gateway 192.168.122.1
+    address 10.0.2.15
+    netmask 255.255.255.0
+    gateway 10.0.2.2
+    # The DNS server is usually 10.0.2.3 for SLIRP
+    dns-nameservers 10.0.2.3
