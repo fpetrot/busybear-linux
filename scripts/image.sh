@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+# set -e
 
 if test "${ARCH}" = "riscv64" -a -f conf/parsec.config ; then
     . conf/parsec.config
@@ -47,7 +47,7 @@ copy_libs() {
 # configure root filesystem
 #
 (
-    set -e
+    # set -e
 
     # now we have installed busybox in /tmp
     cp -r /tmp/mnt .
@@ -64,6 +64,9 @@ copy_libs() {
         mkdir -p mnt/${dir}
     done
 
+    # copy markers
+    mkdir -p mnt/root/bin
+    find markers -type f -executable | xargs -I pwet cp pwet mnt/root/bin/
     # copy busybox and dropbear
     cp build/busybox-${BUSYBOX_VERSION}-${ARCH}/busybox mnt/bin/
     cp build/dropbear-${DROPBEAR_VERSION}-${ARCH}/dropbear mnt/sbin/
@@ -88,15 +91,12 @@ copy_libs() {
 
     # check that the cross-dev env contains the sysroot directory
     # probably should do that earlier, ...
-    #SYSROOT=$(realpath ${GCC_DIR}/sysroot/)
-    #if [ -z "${SYSROOT}" ] ; then
-    #    echo "You must use a linux capable cross-dev environment"
-    #    exit
-    #fi
+    SYSROOT=$(realpath ${GCC_DIR}/sysroot/)
+    if [ -z "${SYSROOT}" ] ; then
+        echo "You must use a linux capable cross-dev environment"
+        exit
+    fi
     
-    # this is what ubuntu does for riscv64
-    SYSROOT=/usr/riscv64-linux-gnu
-
     # copy libraries
     if [ -d ${SYSROOT}/usr/lib${ARCH/riscv/}/${ABI}/ ]; then
         ABI_DIR=lib${ARCH/riscv/}/${ABI}
