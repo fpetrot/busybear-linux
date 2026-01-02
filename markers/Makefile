@@ -1,7 +1,9 @@
 include ../conf/busybear.config
 GCC=$(CROSS_COMPILE)gcc
 
-all: start-marker stop-marker
+.PHONY: markers
+
+markers: start-marker stop-marker
 
 
 start-marker: start-marker.c
