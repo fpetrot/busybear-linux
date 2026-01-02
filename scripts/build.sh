@@ -40,8 +40,12 @@ test -f archives/linux-${LINUX_KERNEL_VERSION}.tar.xz || \
 
 #
 # extract busybox, dropbear and linux
+# We now need libxcrypt in addition if we want to ssh onto the QEMU instance
 #
 test -d build || mkdir build
+test -d build/libxcrypt-${ARCH} || \
+    (cd build && git clone https://github.com/besser82/libxcrypt.git && \
+     mv libxcrypt libxcrypt-${ARCH})
 test -d build/busybox-${BUSYBOX_VERSION}-${ARCH} || \
     (tar -C build -xjf archives/busybox-${BUSYBOX_VERSION}.tar.bz2 && \
      mv build/busybox-${BUSYBOX_VERSION} build/busybox-${BUSYBOX_VERSION}-${ARCH})
@@ -68,7 +72,6 @@ cp conf/linux-${ARCH}.config build/linux-${LINUX_KERNEL_VERSION}/.config
 #
 # build busybox, dropbear and linux
 #
-export MAKEFLAGS=-j$(nproc)
 test -x build/busybox-${BUSYBOX_VERSION}/busybox || (
     cd build/busybox-${BUSYBOX_VERSION}
     make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} oldconfig
@@ -76,9 +79,19 @@ test -x build/busybox-${BUSYBOX_VERSION}/busybox || (
     rm -rf /tmp/mnt
     make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} CONFIG_PREFIX=/tmp/mnt install
 )
+if [ ! -d /tmp/mnt ] ; then
+    echo "@@@@@@@@@@@@@@ Something went wrong, please remove the build directory and rerun"
+    exit 1
+fi
+test -x build/libxcrypt-${ARCH}/build || (
+    cd build/libxcrypt-${ARCH} && ./autogen.sh
+    mkdir build && cd build
+    ../configure --host=${CROSS_COMPILE%-} --prefix=/tmp/mnt/usr
+    make -j
+)
 test -x build/dropbear-${DROPBEAR_VERSION}/dropbear || (
     cd build/dropbear-${DROPBEAR_VERSION}
-    ./configure --host=${CROSS_COMPILE%-} --disable-zlib
+    CFLAGS="-I/tmp/mnt/usr/include" LDFLAGS="-L/tmp/mnt/usr/lib" ./configure --host=${CROSS_COMPILE%-} --disable-zlib
     make -j
 )
 test -x build/linux-${LINUX_KERNEL_VERSION}/Image || (
@@ -88,10 +101,10 @@ test -x build/linux-${LINUX_KERNEL_VERSION}/Image || (
     # Allow more than 32 CPUs max when configuring the kernel
     # echo "$(awk '/config NR_CPUS/,/^$/{sub(/32/,"1024"); print $0;next}{print $0}' arch/riscv/Kconfig)" > arch/riscv/Kconfig
     make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} .config
-    make ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} Image
+    make -j ARCH=riscv CROSS_COMPILE=${CROSS_COMPILE} Image
 )
-# hack to produce markers for qemu plugin(s)
-(cd markers && make clean && make)
+# hack to produce riscv markers for qemu plugin(s)
+(cd markers && make)
 #
 # create filesystem image
 #
