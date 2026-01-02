@@ -107,6 +107,7 @@ copy_libs() {
     LDSO_TARGET=${SYSROOT}/lib/${LDSO_NAME}
     mkdir -p mnt/${ABI_DIR}/
     copy_libs ${SYSROOT}/lib/ mnt/${ABI_DIR}/
+    cp build/libxcrypt-${ARCH}/build/.libs/* mnt/${ABI_DIR}/
     #copy_libs ${SYSROOT}/usr/${ABI_DIR}/ mnt/${ABI_DIR}/
     if [ ! -e mnt/lib/${LDSO_NAME} ]; then
         ln -s /${ABI_DIR}/$(basename ${LDSO_TARGET}) mnt/lib/${LDSO_NAME}
