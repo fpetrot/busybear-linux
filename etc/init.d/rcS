@@ -5,7 +5,6 @@
 /bin/busybox mount -a
 /bin/busybox --install -s
 
-mount -t devtmpfs devtmpfs /dev
 mkdir -p /dev/pts
 mount -t devpts devpts /dev/pts
 
